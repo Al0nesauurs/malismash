@@ -69,12 +69,17 @@ export default function RoachGame() {
             alt="Roach"
             width={size}
             height={size}
+            style={{ width: size, height: size }}
+            loading="eager"
           />
           : <Image
             src="/roachDead2.png"
             alt="Roach"
             width={size}
-            height={size} />
+            height={size}
+            style={{ width: size, height: size }}
+            loading="eager"
+          />
         }
       </div>
     </div>

@@ -13,6 +13,7 @@ const tiltAnimation = `
 export default function RoachGame() {
   const [position, setPosition] = useState({ top: '50%', left: '50%' })
   const [isAlive, setIsAlive] = useState(true)
+  const [transitionDuration, setTransitionDuration] = useState(5000)
   const intervalRef = useRef<NodeJS.Timeout | null>(null)
   const [size, setSize] = useState(200)
 
@@ -20,6 +21,8 @@ export default function RoachGame() {
     if (!isAlive) return
     const randomTop = Math.floor(Math.random() * 80)
     const randomLeft = Math.floor(Math.random() * 80)
+    const duration = Math.random() * 3000 + 2000
+    setTransitionDuration(duration)
     setPosition({ top: `${randomTop}%`, left: `${randomLeft}%` })
   }
 
@@ -54,7 +57,7 @@ export default function RoachGame() {
         top: position.top,
         left: position.left,
         transform: 'translate(-50%, -50%)',
-        transitionDuration: isAlive ? `${Math.random() * 3000 + 2000}ms` : '0ms',
+        transitionDuration: isAlive ? `${transitionDuration}ms` : '0ms',
       }}
     >
 

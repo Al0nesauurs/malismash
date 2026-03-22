@@ -10,12 +10,26 @@ const tiltAnimation = `
   }
 `
 
-export default function RoachGame() {
+export default function RoachGame({ isMuted }: { isMuted: boolean }) {
   const [position, setPosition] = useState({ top: '50%', left: '50%' })
   const [isAlive, setIsAlive] = useState(true)
   const [transitionDuration, setTransitionDuration] = useState(5000)
   const intervalRef = useRef<NodeJS.Timeout | null>(null)
+  const [hasStarted, setHasStarted] = useState(false)
+  const audioRef = useRef<HTMLAudioElement>(null)
   const [size, setSize] = useState(200)
+
+  const startVibe = () => {
+    if (audioRef.current) {
+      audioRef.current.currentTime = 0 // Force restart from beginning
+      audioRef.current.play()
+    }
+    setHasStarted(true)
+  }
+
+  const handleAudioEnd = () => {
+    setHasStarted(false) // Bring back the "Enter" screen when song finishes
+  }
 
   const moveRoach = () => {
     if (!isAlive) return
@@ -42,8 +56,10 @@ export default function RoachGame() {
 
   const handleSmash = (e: React.MouseEvent) => {
     e.stopPropagation()
+    if (!isAlive) return
     if (intervalRef.current) clearInterval(intervalRef.current)
     setIsAlive(false)
+    startVibe()
     setTimeout(() => {
       respawnRoach()
     }, 5000)
@@ -62,6 +78,13 @@ export default function RoachGame() {
     >
 
       <style>{tiltAnimation}</style>
+      <audio
+        ref={audioRef}
+        src="/pop.mp3"
+        onEnded={handleAudioEnd}
+        muted={isMuted}
+      />
+  
       <div style={isAlive ? { animation: 'tilt 0.3s infinite' } : { animation: 'none' }}>
         {isAlive ?
           <Image

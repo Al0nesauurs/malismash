@@ -1,4 +1,5 @@
-import RoachGame from "./RoachGame";
+import RoachGame from "./RoachGame"
+import RoachGameContainer from "./RoachGameContainer"
 
 export default function Home() {
   return (
@@ -7,11 +8,7 @@ export default function Home() {
         backgroundImage: "url('/bg.png')",
         overflow: 'hidden',
       }}>
-      <RoachGame />
-      <RoachGame />
-      <RoachGame />
-      <RoachGame />
-      <RoachGame />
+      <RoachGameContainer />
     </div>
-  );
+  )
 }

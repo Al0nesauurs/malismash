@@ -3,6 +3,13 @@
 import Image from "next/image"
 import { useEffect, useRef, useState } from "react"
 
+const tiltAnimation = `
+  @keyframes tilt {
+    0%, 100% { transform: rotate(-2deg); }
+    50% { transform: rotate(2deg); }
+  }
+`
+
 export default function RoachGame() {
   const [position, setPosition] = useState({ top: '50%', left: '50%' })
   const [isAlive, setIsAlive] = useState(true)
@@ -51,7 +58,8 @@ export default function RoachGame() {
       }}
     >
 
-      <div >
+      <style>{tiltAnimation}</style>
+      <div style={isAlive ? { animation: 'tilt 0.3s infinite' } : { animation: 'none' }}>
         {isAlive ?
           <Image
             src="/roach.png"

@@ -10,8 +10,9 @@ export default function RoachGame() {
   const [size, setSize] = useState(200)
 
   const moveRoach = () => {
-    const randomTop = Math.floor(Math.random() * 80) + 10
-    const randomLeft = Math.floor(Math.random() * 80) + 10
+    if (!isAlive) return
+    const randomTop = Math.floor(Math.random() * 80)
+    const randomLeft = Math.floor(Math.random() * 80)
     setPosition({ top: `${randomTop}%`, left: `${randomLeft}%` })
   }
 
@@ -19,7 +20,7 @@ export default function RoachGame() {
     moveRoach()
     setSize(Math.floor(Math.random() * 151) + 200)
     setIsAlive(true)
-    intervalRef.current = setInterval(moveRoach, 2000)
+    intervalRef.current = setInterval(moveRoach, Math.random() * 3000 + 2000)
     return () => {
       if (intervalRef.current) clearInterval(intervalRef.current)
     }
@@ -41,11 +42,12 @@ export default function RoachGame() {
   return (
     <div
       onClick={handleSmash}
-      className={`absolute ${isAlive ? 'transition-all duration-150 ease-in-out' : 'duration-0'} cursor-pointer text-5xl select-none`}
+      className={`absolute ${isAlive ? 'transition-all ease-in-out' : 'transition-none'} cursor-pointer text-5xl select-none`}
       style={{
         top: position.top,
         left: position.left,
         transform: 'translate(-50%, -50%)',
+        transitionDuration: isAlive ? `${Math.random() * 3000 + 2000}ms` : '0ms',
       }}
     >
 

@@ -5,6 +5,7 @@ export default function Home() {
     <div className="min-h-screen w-full bg-cover bg-center bg-no-repeat"
       style={{
         backgroundImage: "url('/bg.png')",
+        overflow: 'hidden',
       }}>
       <RoachGame />
       <RoachGame />

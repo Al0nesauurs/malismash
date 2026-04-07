@@ -15,7 +15,6 @@ export default function RoachGame({ isMuted }: { isMuted: boolean }) {
   const [isAlive, setIsAlive] = useState(true)
   const [transitionDuration, setTransitionDuration] = useState(5000)
   const intervalRef = useRef<NodeJS.Timeout | null>(null)
-  const [hasStarted, setHasStarted] = useState(false)
   const audioRef = useRef<HTMLAudioElement>(null)
   const [size, setSize] = useState(200)
 
@@ -24,11 +23,10 @@ export default function RoachGame({ isMuted }: { isMuted: boolean }) {
       audioRef.current.currentTime = 0 // Force restart from beginning
       audioRef.current.play()
     }
-    setHasStarted(true)
   }
 
   const handleAudioEnd = () => {
-    setHasStarted(false) // Bring back the "Enter" screen when song finishes
+    audioRef.current?.pause()
   }
 
   const moveRoach = () => {
@@ -41,7 +39,12 @@ export default function RoachGame({ isMuted }: { isMuted: boolean }) {
   }
 
   const respawnRoach = () => {
-    moveRoach()
+    setTransitionDuration(0)
+
+    const randomY = Math.random() > 0.5 ? 120 : -20
+    const randomX = Math.random() > 0.5 ? 120 : -20
+    setPosition({ top: `${randomY}%`, left: `${randomX}%` })
+
     setSize(Math.floor(Math.random() * 151) + 200)
     setIsAlive(true)
     intervalRef.current = setInterval(moveRoach, Math.random() * 3000 + 2000)
@@ -58,8 +61,11 @@ export default function RoachGame({ isMuted }: { isMuted: boolean }) {
     e.stopPropagation()
     if (!isAlive) return
     if (intervalRef.current) clearInterval(intervalRef.current)
+
+    setPosition({ top: `${e.clientY}px`, left: `${e.clientX}px` })
     setIsAlive(false)
     startVibe()
+
     setTimeout(() => {
       respawnRoach()
     }, 5000)
@@ -74,6 +80,7 @@ export default function RoachGame({ isMuted }: { isMuted: boolean }) {
         left: position.left,
         transform: 'translate(-50%, -50%)',
         transitionDuration: isAlive ? `${transitionDuration}ms` : '0ms',
+        zIndex: isAlive ? 10 : 0
       }}
     >
 
@@ -84,7 +91,7 @@ export default function RoachGame({ isMuted }: { isMuted: boolean }) {
         onEnded={handleAudioEnd}
         muted={isMuted}
       />
-  
+
       <div style={isAlive ? { animation: 'tilt 0.3s infinite' } : { animation: 'none' }}>
         {isAlive ?
           <Image

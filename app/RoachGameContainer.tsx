@@ -8,11 +8,11 @@ export default function RoachGameContainer() {
   const [isMuted, setIsMuted] = React.useState(false)
 
   return (
-    <div className="absolute top-0 left-0 w-full h-full">
+    <div className="absolute top-0 left-0 w-full h-full overflow-hidden">
       <audio
-        src="/bgm.mp3"
         autoPlay
         loop
+        src="/bgm.mp3"
         muted={isMuted}
         controls={false}
         style={{ display: 'none' }}
